@@ -1,0 +1,150 @@
+<link rel="stylesheet" href="main.css">
+<div class="user-form" id="login-page">
+    <h2 id="form-title">Login</h2>
+    <h4 id="toggle-text">or <a href="#" id="toggle-link">register</a></h4>
+    <h3 id="error_message" style="color: red"></h3>
+    <form onsubmit="loginFormSubmitted(event)">
+        <label for="email">email</label>
+        <input type="text" id="email" name="studentId" required>
+
+        <label for="password">Password: </label>
+        <input type="text" placeholder="   Your random password..." id="password" name="password" required>
+
+        <button type="submit" id="submitButton">Login</button>
+    </form>
+</div>
+<script>
+    function makeVisible(elementId) {
+        var element = document.getElementById(elementId);
+        if (element) {
+            element.classList.remove("hidden");
+        }
+    }
+
+    async function loginFormSubmitted(event) {
+        event.preventDefault(); // Prevents the default form submission behavior
+        console.log('form submitted1');
+
+        // makeInvisible("falseSuccessRegistraion")
+        // makeInvisible("falseSuccessLogin")
+        // makeInvisible("unknownError")
+        // makeInvisible("chatClosed")
+        // makeInvisible("chatSearching")
+        // makeInvisible('qrcode-area')
+
+        console.log('form submitted2');
+        // Get form data
+        var reg = false;
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        try {
+            if (studentName && studentSurname) {
+                reg = true;
+            }
+        } catch (error) {
+            console.error("An error occurred:", error.message);
+        }
+
+        var requestData;
+        requestData = {
+            "email": email,
+            "password": password,
+        };
+        // Make an AJAX request (assuming you are using the Fetch API)
+
+        if (document.getElementById('toggle-link').text == 'register') {
+            var apiEndpoint = "http://localhost:7000/auth/login"
+
+            try {
+                delete requestData["promotions"];
+            } catch (error) {
+                // Handle the error if needed, or simply ignore it
+                console.error("An error occurred while deleting 'promotions':", error);
+            }
+        } else {
+            var apiEndpoint = "http://localhost:7000/auth/register"
+            requestData["promotions"] = true;
+        }
+
+        fetch(apiEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.access_token) {
+                    // stores twice hashed password to use it for encryption/decryption in future
+                    localStorage.setItem("token", data.token_type + " " + data.access_token)
+                    window.location.href = "./index.html";
+
+                } else {
+                    document.getElementById('email').value = '';
+                    document.getElementById('password').value = '';
+                    document.getElementById('error_message').innerHTML = data.detail
+
+
+                    // if (reg) {
+                    //     makeVisible("falseSuccessRegistraion")
+                    // } else {
+                    //     makeVisible("falseSuccessLogin")
+                    // }
+                }
+
+            })
+            .catch(error => {
+                makeVisible("unknownError")
+                document.getElementById('studentId').outerText = ""
+                document.getElementById('password').outerText = ""
+                document.getElementById('studentName').outerText = ""
+                document.getElementById('studentSurname').outerText = ""
+
+                // Handle errors here
+                console.error('Error:', error);
+            });
+    }
+</script>
+
+<script>
+    document.getElementById('toggle-link').addEventListener('click', function (event) {
+        event.preventDefault();
+        toggleForm();
+    });
+
+    function toggleForm() {
+        var formTitle = document.getElementById('form-title');
+        var toggleText = document.getElementById('toggle-text');
+        var toggleLink = document.getElementById('toggle-link');
+        var studentName = document.getElementById('studentNameDiv');
+        var studentSurname = document.getElementById('studentSurnameDiv');
+        var submitButton = document.getElementById('submitButton');
+
+        if (formTitle.innerText === 'Login') {
+            formTitle.innerText = 'Register';
+            toggleText.innerHTML = 'or <a href="#" id="toggle-link">login</a>';
+            toggleLink = document.getElementById('toggle-link');
+            toggleLink.addEventListener('click', function (event) {
+                event.preventDefault();
+                toggleForm();
+            });
+
+            studentName.classList.remove('hidden');
+            studentSurname.classList.remove('hidden');
+            submitButton.innerText = 'Register';
+        } else {
+            formTitle.innerText = 'Login';
+            toggleText.innerHTML = 'or <a href="#" id="toggle-link">register</a>';
+            toggleLink = document.getElementById('toggle-link');
+            toggleLink.addEventListener('click', function (event) {
+                event.preventDefault();
+                toggleForm();
+            });
+
+            studentName.classList.add('hidden');
+            studentSurname.classList.add('hidden');
+            submitButton.innerText = 'Login';
+        }
+    }
+</script>

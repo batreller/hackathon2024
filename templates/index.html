@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div class="formDiv">
+      <div class="welcome-text">
+        <h1>Welcome to Cars4U</h1>
+      </div>
+      <div class="form-dropdowns">
+        <!-- <div class="dropdown-item">
+          <label for="make-dropdown">Make</label>
+          <select class="dropdown-btn" id="make-dropdown" name="dropdown">
+            <option value="option1">Select a make</option>
+          </select>
+        </div> -->
+
+        <!-- <div class="dropdown-item">
+          <label for="model-dropdown">Select model</label>
+          <select class="dropdown-btn" id="model-dropdown" name="dropdown">
+            <option value="option1">Select a model</option>
+          </select>
+        </div> -->
+
+        <!-- <div class="dropdown-item">
+          <label for="year-dropdown">Year</label>
+          <select class="dropdown-btn" id="year-dropdown" name="dropdown">
+            <option value="option1">Select a year</option>
+          </select>
+        </div> -->
+
+        <!-- <div class="dropdown-item">
+          <label for="price-range-dropdown">Price range</label>
+          <select
+            class="dropdown-btn"
+            id="price-range-dropdown"
+            name="dropdown"
+          >
+            <option value="option1">Select a range</option>
+          </select>
+        </div> -->
+
+        <div class="dropdown">
+          <button class="dropdown-btn" onclick="toggleMake()">
+            Select a make
+          </button>
+          <div class="dropdown-content" id="dropdownMake">
+            <input type="checkbox" id="make1" name="make1" value="make1" />
+            <label for="make1">Make 1</label><br />
+            <input type="checkbox" id="make2" name="make1" value="make1" />
+            <label for="make1">Make 2</label><br />
+            <input type="checkbox" id="make3" name="make1" value="make1" />
+            <label for="make1">Make 3</label><br />
+            <input type="checkbox" id="make4" name="make1" value="make1" />
+            <label for="make1">Make 4</label><br />
+            <input type="checkbox" id="make5" name="make1" value="make1" />
+            <label for="make1">Make 5</label><br />
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <button class="dropdown-btn" onclick="toggleYear()">
+            Select a year
+          </button>
+          <div class="dropdown-content" id="dropdownYear">
+            <label for="make1">Min Year</label><br />
+            <input type="number" id="minYear" value="0" />
+            <label for="make1">MAx Year</label><br />
+            <input type="number" id="maxYear" value="2024" />
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <button class="dropdown-btn" onclick="toggleRange()">
+            Select a price range
+          </button>
+          <div class="dropdown-content" id="dropdownRange">
+            <label for="make1">Min price</label><br />
+            <input type="number" id="minPrice" value="0" />
+            <label for="make1">MAx Price</label><br />
+            <input type="number" id="maxPrice" value="1000000" />
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <button class="dropdown-btn" onclick="toggleMileage()">
+            Select a mileage
+          </button>
+          <div class="dropdown-content" id="dropdownMileage">
+            <label for="make1">MAx Mileage</label><br />
+            <input type="number" id="maxMileage" value="1000000" />
+          </div>
+        </div>
+
+        <div class="dropdown-item">
+          <a class="sign-in-btn" href="./login.html"> Sign In </a>
+          <button class="submit-btn" onclick="createCheckboxes2()">
+            Search
+          </button>
+        </div>
+      </div>
+      <div class="response-field" id="responseField">
+        <!-- <div class="record-line">
+          <div class="record-column">
+            <h3>Make</h3>
+            <p></p>
+          </div>
+          <div class="record-column">
+            <h3>Model</h3>
+            <p></p>
+          </div>
+          <div class="record-column">
+            <h3>Year</h3>
+            <p></p>
+          </div>
+          <div class="record-column">
+            <h3>Transmission</h3>
+            <p></p>
+          </div>
+          <div class="record-column">
+            <h3>Fuel Type</h3>
+            <p></p>
+          </div>
+          <div class="record-column">
+            <h3>MPG</h3>
+            <p></p>
+          </div>
+          <div class="record-column">
+            <h3>Mileage</h3>
+            <p></p>
+          </div>
+          <div class="record-column">
+            <h3>Engine Size</h3>
+            <p></p>
+          </div>
+          <div class="record-column">
+            <h3>Tax</h3>
+            <p></p>
+          </div>
+          <div class="record-column">
+            <h3>Price</h3>
+            <p></p>
+          </div>
+        </div> -->
+      </div>
+    </div>
+    <div class="response"></div>
+    <script src="script.js"></script>
+  </body>
+</html>

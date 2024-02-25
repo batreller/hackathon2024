@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "hackathon"
+version = "0.1.0"
+description = ""
+authors = ["batreller <batreller@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.109.2"
+sqlalchemy = "^2.0.27"
+uvicorn = "^0.27.1"
+asyncpg = "^0.29.0"
+alembic = "^1.13.1"
+passlib = "^1.7.4"
+pyjwt = "^2.8.0"
+bcrypt = "^4.1.2"
+python-jose = "^3.3.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
