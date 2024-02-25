@@ -76,4 +76,4 @@ async def get_cars(db_session: AsyncSession, filters: CarsFiltersSchema):
             MaintenanceModel, (CarModel.make == MaintenanceModel.make) & (CarModel.model == MaintenanceModel.model) & (
                         CarModel.year == MaintenanceModel.year)).order_by
         (config.EARLY_MILEAGE / CarModel.mpg * LITERS_IN_GALON * FuelModel.fuel_price_in_pounds + CarModel.tax + MaintenanceModel.maintenance_cost + (CarModel.satisfaction * config.SATISFACTION_MULTIPLIER)).limit(
-            150))).mappings().all()
+            15))).mappings().all()

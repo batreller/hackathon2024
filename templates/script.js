@@ -134,7 +134,7 @@ function createCheckboxes2() {
       var responses = document.getElementById('responseField');
       // responses.innerHTML = data;
       console.log('Response:', data);
-
+      responses.innerHTML = '';
       // engine_size: 1.6;
       // fuel_type: 'diesel';
       // id: 83364;
@@ -148,47 +148,53 @@ function createCheckboxes2() {
       // transmission: 'manual';
       // year: 2016;
 
-      data.forEach(function (optionText) {
-        makes.innerHTML += `<div class="record-line">
+      // data.forEach(function (optionText) {
+      //   makes.innerHTML += `<div class="record-line">
+      data.forEach(function (data) {
+        responses.innerHTML += `<div class="record-line">
   <div class="record-column">
     <h3>Make</h3>
-    <p>${optionText.make}</p>
+    <p>${data.CarModel.make}</p>
   </div>
   <div class="record-column">
     <h3>Model</h3>
-    <p>${optionText.model}</p>
+    <p>${data.CarModel.model}</p>
   </div>
   <div class="record-column">
     <h3>Year</h3>
-    <p>${optionText.year}</p>
+    <p>${data.CarModel.year}</p>
   </div>
   <div class="record-column">
     <h3>Transmission</h3>
-    <p>${optionText.transmission}</p>
+    <p>${data.CarModel.transmission}</p>
   </div>
   <div class="record-column">
     <h3>Fuel Type</h3>
-    <p>${optionText.fuel_type}</p>
+    <p>${data.CarModel.fuel_type}</p>
   </div>
   <div class="record-column">
     <h3>MPG</h3>
-    <p>${optionText.mpg}</p>
+    <p>${data.CarModel.mpg}</p>
   </div>
   <div class="record-column">
     <h3>Mileage</h3>
-    <p>${optionText.mileage}</p>
+    <p>${data.CarModel.mileage}</p>
   </div>
   <div class="record-column">
     <h3>Engine Size</h3>
-    <p>${optionText.engine_size}</p>
+    <p>${data.CarModel.engine_size}</p>
   </div>
   <div class="record-column">
     <h3>Tax</h3>
-    <p>${optionText.tax}</p>
+    <p>${data.CarModel.tax}</p>
   </div>
   <div class="record-column">
     <h3>Price</h3>
-    <p>${optionText.price}</p>
+    <p>${data.CarModel.price}</p>
+  </div>
+    <div class="record-column">
+    <h3>Five Years Price</h3>
+    <p>${data.five_years_price}</p>
   </div>
 </div>
 `;
