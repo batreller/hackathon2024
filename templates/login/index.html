@@ -1,4 +1,6 @@
-<link rel="stylesheet" href="main.css">
+<link rel="stylesheet" href="/static/main.css">
+<title>Cars4U - Login</title>
+<link rel="icon" href="../favicon.ico" type="image/x-icon">
 <div class="user-form" id="login-page">
     <h2 id="form-title">Login</h2>
     <h4 id="toggle-text">or <a href="#" id="toggle-link">register</a></h4>
@@ -53,7 +55,7 @@
         // Make an AJAX request (assuming you are using the Fetch API)
 
         if (document.getElementById('toggle-link').text == 'register') {
-            var apiEndpoint = "http://localhost:7000/auth/login"
+            var apiEndpoint = "/auth/login"
 
             try {
                 delete requestData["promotions"];
@@ -62,7 +64,7 @@
                 console.error("An error occurred while deleting 'promotions':", error);
             }
         } else {
-            var apiEndpoint = "http://localhost:7000/auth/register"
+            var apiEndpoint = "/auth/register"
             requestData["promotions"] = true;
         }
 
@@ -78,7 +80,7 @@
                 if (data.access_token) {
                     // stores twice hashed password to use it for encryption/decryption in future
                     localStorage.setItem("token", data.token_type + " " + data.access_token)
-                    window.location.href = "./index.html";
+                    window.location.href = "/static";
 
                 } else {
                     document.getElementById('email').value = '';

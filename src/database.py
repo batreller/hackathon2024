@@ -3,11 +3,9 @@ from typing import Any, AsyncIterator
 
 from sqlalchemy.ext.asyncio import (
     AsyncConnection,
-    AsyncSession,
     async_sessionmaker,
     create_async_engine,
 )
-from sqlalchemy.orm import declarative_base
 from src import config
 
 from typing import Annotated
@@ -27,7 +25,7 @@ class Base(DeclarativeBase):
 class DatabaseSessionManager:
     def __init__(self, host: str, engine_kwargs: dict[str, Any] = {}):
         self._engine = create_async_engine(host, **engine_kwargs)
-        self._sessionmaker = async_sessionmaker(autocommit=False, bind=self._engine)
+        self._sessionmaker = async_sessionmaker(autocommit=False, bind=self._engine, expire_on_commit=False)
 
     async def close(self):
         if self._engine is None:

@@ -1,7 +1,7 @@
 """add fuel table
 
 Revision ID: 4ba0c3464647
-Revises: e4222f79264a
+Revises: ca72df19df31
 Create Date: 2024-02-25 07:53:03.178722
 
 """
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision: str = '4ba0c3464647'
-down_revision: Union[str, None] = 'e4222f79264a'
+down_revision: Union[str, None] = 'ca72df19df31'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

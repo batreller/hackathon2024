@@ -10,6 +10,7 @@ class UserModel(Base):
     id = Column(Integer, primary_key=True)
     email = Column(String, unique=True)
     promotions = Column(Boolean)
+    guest = Column(Boolean)
     password = Column(String)  # hash
 
     logs = relationship("LogModel", back_populates="user")

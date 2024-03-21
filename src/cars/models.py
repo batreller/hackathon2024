@@ -21,6 +21,7 @@ class CarModel(Base):
     mpg = Column(Float)
     engine_size = Column(Float)
     satisfaction = Column(Float)
+    class_prediction = Column(Integer)
 
     @property
     def maintenance(self):

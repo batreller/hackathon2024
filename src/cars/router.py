@@ -1,14 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter
 
-from src.auth import service
-from src.auth.dependencies import CurrentUserDep
-from src.auth.schemas import RegisterData, UserSchemeDetailed, LoginData, Token
-from src.auth.exceptions import UserAlreadyExists
 from src.cars.schemas import CarsFiltersSchema
-from src.cars.service import get_cars_makes, get_cars_models, get_cars
-from src.database import get_db_session, DBSessionDep
-from src.exceptions import InvalidCredentials, TokenParseError
-from src.models import UserModel
+from src.cars.service import get_cars_makes, get_cars_models, get_cars, add_log, get_recommended_car
+from src.auth.dependencies import CurrentUserDep
+from src.database import DBSessionDep
 
 router = APIRouter()
 
@@ -25,9 +20,21 @@ async def get_models(car_make: str, db_session: DBSessionDep):
 
 
 @router.post("/find")
-async def find_cars(filters: CarsFiltersSchema,
-                    db_session: DBSessionDep
-                    ):
-    car = await get_cars(db_session, filters)
-    # await add_log()
-    return car
+async def find_cars(
+        user: CurrentUserDep,
+        filters: CarsFiltersSchema,
+        db_session: DBSessionDep
+):
+    cars = await get_cars(db_session, filters)
+
+    for car in cars:
+        await add_log(db_session, user, car.CarModel)
+    return cars
+
+
+@router.get("/recommended")
+async def recommended_car(
+        user: CurrentUserDep,
+        db_session: DBSessionDep
+):
+    return await get_recommended_car(db_session, user)

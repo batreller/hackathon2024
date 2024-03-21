@@ -32,6 +32,8 @@ def upgrade() -> None:
     sa.Column('tax', sa.Integer(), nullable=True),
     sa.Column('mpg', sa.Float(), nullable=True),
     sa.Column('engine_size', sa.Float(), nullable=True),
+    sa.Column('satisfaction', sa.Float(), nullable=True),
+    sa.Column('class_prediction', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('logs',

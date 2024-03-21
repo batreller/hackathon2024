@@ -1,0 +1,4 @@
+.idea
+.venv
+src/fuel_forecast
+csv

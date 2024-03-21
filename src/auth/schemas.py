@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -19,8 +21,9 @@ class LoginData(BaseModel):
 
 class UserScheme(BaseModel):
     id: int
-    email: str
-    promotions: bool
+    email: Optional[str]
+    promotions: Optional[bool]
+    guest: Optional[bool]
 
     class Config:
         from_attributes = True
@@ -28,10 +31,12 @@ class UserScheme(BaseModel):
 
 class UserSchemeDetailed(BaseModel):
     id: int
-    email: str
-    promotions: bool
-    _password: str
+    email: Optional[str]
+    promotions: Optional[bool]
+    guest: Optional[bool]
+    password: Optional[str]
 
     class Config:
         from_attributes = True
-        underscore_attrs_are_private = True
+    #     underscore_attrs_are_private = True
+    # todo make sure its ok

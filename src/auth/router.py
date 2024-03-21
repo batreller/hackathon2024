@@ -1,9 +1,10 @@
 from fastapi import APIRouter
 
-from src.auth import service
 from src.auth.dependencies import CurrentUserDep
-from src.auth.schemas import RegisterData, UserSchemeDetailed, LoginData, Token
+from src.auth.schemas import RegisterData, LoginData, Token, UserScheme
 from src.auth.exceptions import UserAlreadyExists
+from src import config
+from src.auth import service
 from src.database import DBSessionDep
 from src.exceptions import InvalidCredentials
 
@@ -44,12 +45,23 @@ async def register(
     return Token(access_token=jwt_token, token_type="Bearer")
 
 
-
 @router.get(
     "/me",
-    response_model=UserSchemeDetailed
+    response_model=UserScheme
 )
 async def get_me(
         user: CurrentUserDep
 ):
-    return UserSchemeDetailed.from_orm(user)
+    return UserScheme.from_orm(user)
+
+
+@router.post(
+    "/guest",
+    response_model=Token
+)
+async def get_me(
+        db_session: DBSessionDep
+):
+    user_model = await service.create_guest_user(db_session)
+    jwt_token = service.create_access_token(user_model.id, expiry_time=config.GUEST_JWT_EXPIRY_TIME)
+    return Token(access_token=jwt_token, token_type="Bearer")

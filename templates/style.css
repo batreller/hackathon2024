@@ -12,6 +12,18 @@ body {
   height: 100%;
 }
 
+.record-line{
+  display: flex; /* Use flexbox */
+  flex-wrap: wrap; /* Allow wrapping of columns */
+}
+
+.record-column{
+  flex: 1; /* Let the columns grow equally */
+  padding: 10px; /* Add some spacing between columns */
+  border: 1px solid #ccc; /* Add borders for visualization */
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
 html {
   background-image: url(Default_car_photo_collage_0.jpg);
   background-size: cover;

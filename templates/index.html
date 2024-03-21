@@ -1,18 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
-  </head>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="style.css"/>
+    <title>Cars4U - Find a car</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<script>
+    var already_have_account = false;
+    var session_valid = false;
+    var res_total = 'never_had_an_account';
+    var myaccount = null;
+    // Check if localStorage is supported by the browser
+    if (typeof (Storage) !== "undefined") {
+        // Retrieve the value of "token" from localStorage
+        var token = localStorage.getItem("token");
 
-  <body>
-    <div class="formDiv">
-      <div class="welcome-text">
+        // Check if token exists
+        if (token !== null) {
+            // Use the token value
+            already_have_account = true;
+
+            // todo might be temp account
+        } else {
+            console.log("Token does not exist in storage.");
+            already_have_account = false;
+            res_total = 'never_had_an_account';
+        }
+    } else {
+        console.log("LocalStorage is not supported in this browser.");
+        already_have_account = false;
+        res_total = 'never_had_an_account';
+    }
+
+
+    if (already_have_account) {  // has had an account or still have it
+        // URL of the endpoint you want to send the request to
+
+        fetch('/auth/me', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(jsonResponse => {
+                // Handle JSON response here
+                // localStorage.setItem("token", data.token_type + " " + data.access_token)
+
+                console.log(jsonResponse);
+                myaccount = jsonResponse
+                session_valid = true;
+                res_total = 'valid_current_real_session'
+                set_account_info_button()
+            })
+            .catch(error => {
+                // Handle errors here
+                console.error('There was a problem with your fetch operation:', error);
+                session_valid = false;
+                res_total = 'current_session_real_but_expired'
+                window.location.href = './login'
+            });
+    } else {  // NEVER had account
+        getGuestSession().then(() => {
+            token = localStorage.getItem("token");
+
+
+            fetch('/auth/me', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem("token")
+                },
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    set_account_info_button()
+                    return response.json();
+                })
+                .then(jsonResponse => {
+                    // Handle JSON response here
+                    console.log(jsonResponse);
+                    myaccount = jsonResponse
+                    set_account_info_button()
+                })
+                .catch(error => {
+                    // Handle errors here
+                    console.error('There was a problem with your fetch operation:', error);
+                    set_account_info_button()
+                });
+        }).catch(error => {
+            console.error(error);
+            set_account_info_button()
+        });
+
+
+    }
+
+    function set_account_info_button() {
+        var account_info_div = document.getElementById("acount-info");
+        if (myaccount['email'] == null) {
+            account_info_div.innerHTML = `<a className="sign-in-btn" href="./login">[Hello Guest!] Sign In </a>`;
+        } else {
+            account_info_div.innerHTML = `<h2>Hello ${myaccount['email']}</h2>`;
+        }
+    }
+
+    function getGuestSession() {
+        return fetch('/auth/guest', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(responseData => {
+                if (responseData["access_token"]) {
+                    // stores twice hashed password to use it for encryption/decryption in future
+                    localStorage.setItem("token", responseData["token_type"] + " " + responseData["access_token"])
+                    console.log('token' + ' ' + responseData["access_token"])
+                    console.log(localStorage.getItem('token'))
+                    // window.location.href = "/static";
+
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                throw error;
+            });
+    }
+
+</script>
+<body>
+<div id="ads" style="width: 25%; background-color: red">
+
+</div>
+<div class="formDiv">
+    <div class="welcome-text">
         <h1>Welcome to Cars4U</h1>
-      </div>
-      <div class="form-dropdowns">
+    </div>
+    <div class="form-dropdowns">
         <!-- <div class="dropdown-item">
           <label for="make-dropdown">Make</label>
           <select class="dropdown-btn" id="make-dropdown" name="dropdown">
@@ -46,65 +187,66 @@
         </div> -->
 
         <div class="dropdown">
-          <button class="dropdown-btn" onclick="toggleMake()">
-            Select a make
-          </button>
-          <div class="dropdown-content" id="dropdownMake">
-            <input type="checkbox" id="make1" name="make1" value="make1" />
-            <label for="make1">Make 1</label><br />
-            <input type="checkbox" id="make2" name="make1" value="make1" />
-            <label for="make1">Make 2</label><br />
-            <input type="checkbox" id="make3" name="make1" value="make1" />
-            <label for="make1">Make 3</label><br />
-            <input type="checkbox" id="make4" name="make1" value="make1" />
-            <label for="make1">Make 4</label><br />
-            <input type="checkbox" id="make5" name="make1" value="make1" />
-            <label for="make1">Make 5</label><br />
-          </div>
+            <button class="dropdown-btn" onclick="toggleMake()">
+                Select a make
+            </button>
+            <div class="dropdown-content" id="dropdownMake">
+                <input type="checkbox" id="make1" name="make1" value="make1"/>
+                <label for="make1">Make 1</label><br/>
+                <input type="checkbox" id="make2" name="make1" value="make1"/>
+                <label for="make1">Make 2</label><br/>
+                <input type="checkbox" id="make3" name="make1" value="make1"/>
+                <label for="make1">Make 3</label><br/>
+                <input type="checkbox" id="make4" name="make1" value="make1"/>
+                <label for="make1">Make 4</label><br/>
+                <input type="checkbox" id="make5" name="make1" value="make1"/>
+                <label for="make1">Make 5</label><br/>
+            </div>
         </div>
 
         <div class="dropdown">
-          <button class="dropdown-btn" onclick="toggleYear()">
-            Select a year
-          </button>
-          <div class="dropdown-content" id="dropdownYear">
-            <label for="make1">Min Year</label><br />
-            <input type="number" id="minYear" value="0" />
-            <label for="make1">MAx Year</label><br />
-            <input type="number" id="maxYear" value="2024" />
-          </div>
+            <button class="dropdown-btn" onclick="toggleYear()">
+                Select a year
+            </button>
+            <div class="dropdown-content" id="dropdownYear">
+                <label for="make1">Min Year</label><br/>
+                <input type="number" id="minYear" value="0"/>
+                <label for="make1">MAx Year</label><br/>
+                <input type="number" id="maxYear" value="2024"/>
+            </div>
         </div>
 
         <div class="dropdown">
-          <button class="dropdown-btn" onclick="toggleRange()">
-            Select a price range
-          </button>
-          <div class="dropdown-content" id="dropdownRange">
-            <label for="make1">Min price</label><br />
-            <input type="number" id="minPrice" value="0" />
-            <label for="make1">MAx Price</label><br />
-            <input type="number" id="maxPrice" value="1000000" />
-          </div>
+            <button class="dropdown-btn" onclick="toggleRange()">
+                Select a price range
+            </button>
+            <div class="dropdown-content" id="dropdownRange">
+                <label for="make1">Min price</label><br/>
+                <input type="number" id="minPrice" value="0"/>
+                <label for="make1">MAx Price</label><br/>
+                <input type="number" id="maxPrice" value="1000000"/>
+            </div>
         </div>
 
         <div class="dropdown">
-          <button class="dropdown-btn" onclick="toggleMileage()">
-            Select a mileage
-          </button>
-          <div class="dropdown-content" id="dropdownMileage">
-            <label for="make1">MAx Mileage</label><br />
-            <input type="number" id="maxMileage" value="1000000" />
-          </div>
+            <button class="dropdown-btn" onclick="toggleMileage()">
+                Select a mileage
+            </button>
+            <div class="dropdown-content" id="dropdownMileage">
+                <label for="make1">MAx Mileage</label><br/>
+                <input type="number" id="maxMileage" value="1000000"/>
+            </div>
         </div>
 
+        <div id="acount-info" class="dropdown-item">
+        </div>
         <div class="dropdown-item">
-          <a class="sign-in-btn" href="./login.html"> Sign In </a>
-          <button class="submit-btn" onclick="createCheckboxes2()">
-            Search
-          </button>
+            <button class="submit-btn" onclick="createCheckboxes2()">
+                Search
+            </button>
         </div>
-      </div>
-      <div class="response-field" id="responseField">
+    </div>
+    <div class="response-field" id="responseField">
         <!-- <div class="record-line">
           <div class="record-column">
             <h3>Make</h3>
@@ -147,9 +289,9 @@
             <p></p>
           </div>
         </div> -->
-      </div>
     </div>
-    <div class="response"></div>
-    <script src="script.js"></script>
-  </body>
+</div>
+<div class="response"></div>
+<script src="script.js"></script>
+</body>
 </html>
